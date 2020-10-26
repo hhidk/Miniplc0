@@ -2,6 +2,7 @@ package miniplc0java.tokenizer;
 
 import miniplc0java.error.TokenizeError;
 import miniplc0java.error.ErrorCode;
+import miniplc0java.util.Pos;
 
 public class Tokenizer {
 
@@ -47,7 +48,19 @@ public class Tokenizer {
         // 解析成功则返回无符号整数类型的token，否则返回编译错误
         //
         // Token 的 Value 应填写数字的值
-        throw new Error("Not implemented");
+
+        Pos startPos = it.currentPos();
+        StringBuilder stringBuilder = new StringBuilder();
+        while (Character.isDigit(it.peekChar())) {
+            char peek = it.nextChar();
+            stringBuilder.append(peek);
+        }
+        Pos endPos = it.currentPos();
+        int value = Integer.parseInt(stringBuilder.toString());
+
+        return new Token(TokenType.Uint, value, startPos, endPos);
+
+        // throw new Error("Not implemented");
     }
 
     private Token lexIdentOrKeyword() throws TokenizeError {
@@ -60,7 +73,32 @@ public class Tokenizer {
         // -- 否则，返回标识符
         //
         // Token 的 Value 应填写标识符或关键字的字符串
-        throw new Error("Not implemented");
+
+        Pos startPos = it.currentPos();
+        StringBuilder stringBuilder = new StringBuilder();
+        while (Character.isDigit(it.peekChar()) || Character.isLetter(it.peekChar())) {
+            char peek = it.nextChar();
+            stringBuilder.append(peek);
+        }
+        Pos endPos = it.currentPos();
+        String value = stringBuilder.toString();
+
+        switch (value) {
+            case "begin":
+                return new Token(TokenType.Begin, value, startPos, endPos);
+            case "end":
+                return new Token(TokenType.End, value, startPos, endPos);
+            case "const":
+                return new Token(TokenType.Const, value, startPos, endPos);
+            case "var":
+                return new Token(TokenType.Var, value, startPos, endPos);
+            case "print":
+                return new Token(TokenType.Print, value, startPos, endPos);
+            default:
+                return new Token(TokenType.Ident, value, startPos, endPos);
+        }
+
+        // throw new Error("Not implemented");
     }
 
     private Token lexOperatorOrUnknown() throws TokenizeError {
@@ -69,18 +107,28 @@ public class Tokenizer {
                 return new Token(TokenType.Plus, '+', it.previousPos(), it.currentPos());
 
             case '-':
-                // 填入返回语句
-                throw new Error("Not implemented");
+                return new Token(TokenType.Minus, '-', it.previousPos(), it.currentPos());
+                // throw new Error("Not implemented");
 
             case '*':
-                // 填入返回语句
-                throw new Error("Not implemented");
+                return new Token(TokenType.Mult, '*', it.previousPos(), it.currentPos());
+                // throw new Error("Not implemented");
 
             case '/':
-                // 填入返回语句
-                throw new Error("Not implemented");
+                return new Token(TokenType.Div, '/', it.previousPos(), it.currentPos());
+                // throw new Error("Not implemented");
 
-            // 填入更多状态和返回语句
+            case '=':
+                return new Token(TokenType.Equal, '=', it.previousPos(), it.currentPos());
+
+            case ';':
+                return new Token(TokenType.Semicolon, ';', it.previousPos(), it.currentPos());
+
+            case '(':
+                return new Token(TokenType.LParen, '(', it.previousPos(), it.currentPos());
+
+            case ')':
+                return  new Token(TokenType.RParen, ')', it.previousPos() ,it.currentPos());
 
             default:
                 // 不认识这个输入，摸了
