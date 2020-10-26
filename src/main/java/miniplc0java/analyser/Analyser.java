@@ -297,7 +297,7 @@ public final class Analyser {
                 break;
             }
         }
-        throw new Error("Not implemented");
+        // throw new Error("Not implemented");
     }
 
     private int analyseConstantExpression() throws CompileError {
@@ -464,6 +464,6 @@ public final class Analyser {
         if (negate) {
             instructions.add(new Instruction(Operation.SUB));
         }
-        throw new Error("Not implemented");
+        // throw new Error("Not implemented");
     }
 }
