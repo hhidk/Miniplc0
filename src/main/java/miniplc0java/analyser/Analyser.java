@@ -255,7 +255,7 @@ public final class Analyser {
             boolean initialized = false;
 
             // 下个 token 是等于号吗？如果是的话分析初始化
-            expect(TokenType.Equal);
+            // expect(TokenType.Equal);
 
             // 分析初始化的表达式
             if (nextIf(TokenType.Equal) != null) {
